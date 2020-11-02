@@ -48,6 +48,7 @@ namespace Kehadiran
                 dataGridView1.Rows.Add(date.ToString("dd/MM/yyyy - dddd"));
             }
             dataGridView1.Rows.Add(dayLast);
+            dataGridView1.AllowUserToAddRows = false;
 
 
         }
@@ -80,8 +81,11 @@ namespace Kehadiran
             dtPicker.Location = new Point(_Rectangle.X, _Rectangle.Y); //  
             
             dtPicker.Format = DateTimePickerFormat.Time;
-            //dtPicker.CustomFormat = "HH:mm";
             dtPicker.ShowUpDown = true;
+
+            dtPicker.CustomFormat = "HH:mm tt";
+            //dtPicker.CustomFormat = "HH:mm";
+            //dtPicker.ShowUpDown = true;
             //dtPicker.Size = dataGridView1.CurrentCell.Size;
             //dtPicker.Top = dataGridView1.GetCellDisplayRectangle(e.ColumnIndex, e.RowIndex, true).Top + dataGridView1.Top;
             //dtPicker.Left = dataGridView1.GetCellDisplayRectangle(e.ColumnIndex, e.RowIndex, true).Left + dataGridView1.Left;
@@ -108,11 +112,49 @@ namespace Kehadiran
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string startTime = "7:00 AM";
+            /*string startTime = "7:00 AM";
             string endTime = "2:00 PM";
 
             TimeSpan duration = DateTime.Parse(endTime).Subtract(DateTime.Parse(startTime));
             MessageBox.Show($"hello world {duration} h");
+            */
+
+           
+
+            for (int i = 0; i < dataGridView1.RowCount; i++)
+            {
+                try
+                {
+                    if (dataGridView1.Rows[i + 1].Cells["Column2"].Value != null)
+                    {
+                        MessageBox.Show($" ok {dataGridView1.Rows[i + 1].Cells["Column2"].Value.ToString()}");
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($" nok = {ex.StackTrace}");
+                }
+                
+                
+
+                /*var timeIN_beforeLunch = dataGridView1.Rows[i + 1].Cells["Column2"].Value.ToString();
+                var timeOUT_beforeLunch = dataGridView1.Rows[i + 1].Cells["Column3"].Value.ToString();
+
+                if(timeIN_beforeLunch!=null && timeOUT_beforeLunch != null)
+                {
+                   var totalHourBeforeLunch = DateTime.Parse(timeOUT_beforeLunch).Subtract(DateTime.Parse(timeIN_beforeLunch));
+                    MessageBox.Show($" work h {totalHourBeforeLunch}");
+                }*/
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            foreach (DataGridViewBand band in dataGridView1.Columns)
+            {
+                band.ReadOnly = true;
+            }
         }
     }
 }
