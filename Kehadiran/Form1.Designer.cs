@@ -75,7 +75,7 @@
             // 
             this.dateTimePicker1.Location = new System.Drawing.Point(478, 25);
             this.dateTimePicker1.Name = "dateTimePicker1";
-            this.dateTimePicker1.Size = new System.Drawing.Size(200, 23);
+            this.dateTimePicker1.Size = new System.Drawing.Size(170, 23);
             this.dateTimePicker1.TabIndex = 2;
             // 
             // btnGenerate
@@ -166,7 +166,6 @@
             this.Controls.Add(this.textBox1);
             this.Name = "Form1";
             this.Text = "Form1";
-            
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
