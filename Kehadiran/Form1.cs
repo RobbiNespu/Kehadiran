@@ -1,15 +1,20 @@
 ﻿using Microsoft.VisualBasic;
 using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace Kehadiran
 {
     public partial class Form1 : Form
     {
+        // Create a new DateTimePicker control and initialize it.
+        DateTimePicker dtPicker = new DateTimePicker();
+        Rectangle _Rectangle;
         public Form1()
         {
             InitializeComponent();
             SetMyCustomFormat();
+            
         }
 
         private void SetMyCustomFormat()
@@ -29,23 +34,15 @@ namespace Kehadiran
             btnGenerate.Enabled = false;
 
             dataGridView1.ColumnHeadersVisible = true;
-            /*dataGridView1.Columns[0].Name = "Test";*/
-
-            //dataGridView1.Rows.Add("aa");
-
-            /*DataGridViewRow dr = new DataGridViewRow();
-            dr.CreateCells(dataGridView1);
-            //dr.Cells[0].Value = dateTimePicker1.Value.GetDateTimeFormats()[3];
-            dr.Cells[0].Value = dateTimePicker1.Value.ToString("dd/MM/yyyy - dddd");
-            dr.Cells[1].Value = "xx";
-            dataGridView1.Rows.Insert(0, dr);*/
+            //dataGridView1.DefaultCellStyle.Format = "hh:mm:ss tt";
+            //dataGridView1.ColumnHeadersDefaultCellStyle.Format = "hh:mm:ss tt";
 
             DateTime dayFirst = dateTimePicker1.Value;
             var dayLastDate = DateTime.DaysInMonth(dateTimePicker1.Value.Year, dateTimePicker1.Value.Month);
             DateTime dayLast = new DateTime(dateTimePicker1.Value.Year, dateTimePicker1.Value.Month, dayLastDate);
             //MessageBox.Show($"hello world {dayLast}");
 
-            
+
             for (DateTime date = dayFirst; dayLast.CompareTo(date) >= 1; date = date.AddDays(1.0))
             {
                 dataGridView1.Rows.Add(date.ToString("dd/MM/yyyy - dddd"));
@@ -53,25 +50,69 @@ namespace Kehadiran
             dataGridView1.Rows.Add(dayLast);
 
 
+        }
 
-            //(dateTimePicker1.Value.Date - StartDate.Date).Days
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            MessageBox.Show($"hello world {e.ColumnIndex} {e.RowIndex}");
+            //MessageBox.Show($"You must be logged in as an Administrator in order to change the facility configuration no {e.ColumnIndex}.", "Delete Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
 
-            // Populate the rows.
-            /*string[] row1 = new string[] { "Meatloaf", "Main Dish", "ground beef",        "**" };
-            string[] row2 = new string[] { "Key Lime Pie", "Dessert",        "lime juice, evaporated milk", "****" };
-            string[] row3 = new string[] { "Orange-Salsa Pork Chops", "Main Dish",        "pork chops, salsa, orange juice", "****" };
-            string[] row4 = new string[] { "Black Bean and Rice Salad", "Salad",        "black beans, brown rice", "****" };
-            string[] row5 = new string[] { "Chocolate Cheesecake", "Dessert",        "cream cheese", "***" };
-            string[] row6 = new string[] { "Black Bean Dip", "Appetizer",        "black beans, sour cream", "***" };
-            object[] rows = new object[] { row1, row2, row3, row4, row5, row6 };
-
-            foreach (string[] rowArray in rows)
+        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            //MessageBox.Show($"{dataGridView1.Columns[e.ColumnIndex].Name}  = {e.ColumnIndex} {e.RowIndex}");
+            //MessageBox.Show($"You must be logged in as an Administrator in order to change the facility configuration no {e.ColumnIndex}.", "Delete Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            if (dataGridView1.Columns[e.ColumnIndex].Name == "Column2" || dataGridView1.Columns[e.ColumnIndex].Name == "Column3" || dataGridView1.Columns[e.ColumnIndex].Name == "Column5" || dataGridView1.Columns[e.ColumnIndex].Name == "Column6"|| dataGridView1.Columns[e.ColumnIndex].Name == "Column8" || dataGridView1.Columns[e.ColumnIndex].Name == "Column9")
             {
-                dataGridView1.Rows.Add(rowArray);
-            }*/
+                //MessageBox.Show($"{dataGridView1.Columns[e.ColumnIndex].Name}  = {e.ColumnIndex} {e.RowIndex}");
+                setNewCellDate(e);
+            }
+        }
+
+        private void setNewCellDate(DataGridViewCellEventArgs e)
+        {
+            //throw new NotImplementedException();
+            dataGridView1.Controls.Add(dtPicker);
 
 
+            _Rectangle = dataGridView1.GetCellDisplayRectangle(e.ColumnIndex, e.RowIndex, true); //  
+            dtPicker.Size = new Size(_Rectangle.Width, _Rectangle.Height); //  
+            dtPicker.Location = new Point(_Rectangle.X, _Rectangle.Y); //  
+            
+            dtPicker.Format = DateTimePickerFormat.Time;
+            //dtPicker.CustomFormat = "HH:mm";
+            dtPicker.ShowUpDown = true;
+            //dtPicker.Size = dataGridView1.CurrentCell.Size;
+            //dtPicker.Top = dataGridView1.GetCellDisplayRectangle(e.ColumnIndex, e.RowIndex, true).Top + dataGridView1.Top;
+            //dtPicker.Left = dataGridView1.GetCellDisplayRectangle(e.ColumnIndex, e.RowIndex, true).Left + dataGridView1.Left;
+            if (!(object.Equals(Convert.ToString(dataGridView1.CurrentCell.Value), "")))
+                dtPicker.Value = Convert.ToDateTime(dataGridView1.CurrentCell.Value);
+            dtPicker.Visible = true;
+            dtPicker.TextChanged += new EventHandler(dtPicker_TextChange);
+        }
+
+        private void dtPicker_TextChange(object sender, EventArgs e)
+        {
+            dataGridView1.CurrentCell.Value = dtPicker.Text.ToString();
+        }
+
+        private void dataGridView1_Scroll(object sender, ScrollEventArgs e)
+        {
+            dtPicker.Visible = false;
+        }
+
+        private void dataGridView1_ColumnWidthChanged(object sender, DataGridViewColumnEventArgs e)
+        {
+            //dtPicker.Visible = false;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            string startTime = "7:00 AM";
+            string endTime = "2:00 PM";
+
+            TimeSpan duration = DateTime.Parse(endTime).Subtract(DateTime.Parse(startTime));
+            MessageBox.Show($"hello world {duration} h");
         }
     }
-
 }
