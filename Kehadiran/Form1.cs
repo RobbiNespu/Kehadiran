@@ -29,28 +29,29 @@ namespace Kehadiran
             btnGenerate.Enabled = false;
 
             dataGridView1.ColumnHeadersVisible = true;
-            dataGridView1.Columns[0].Name = "Test";
+            /*dataGridView1.Columns[0].Name = "Test";*/
 
             //dataGridView1.Rows.Add("aa");
 
-            DataGridViewRow dr = new DataGridViewRow();
+            /*DataGridViewRow dr = new DataGridViewRow();
             dr.CreateCells(dataGridView1);
             //dr.Cells[0].Value = dateTimePicker1.Value.GetDateTimeFormats()[3];
             dr.Cells[0].Value = dateTimePicker1.Value.ToString("dd/MM/yyyy - dddd");
             dr.Cells[1].Value = "xx";
-            dataGridView1.Rows.Insert(0, dr);
+            dataGridView1.Rows.Insert(0, dr);*/
 
             DateTime dayFirst = dateTimePicker1.Value;
             var dayLastDate = DateTime.DaysInMonth(dateTimePicker1.Value.Year, dateTimePicker1.Value.Month);
             DateTime dayLast = new DateTime(dateTimePicker1.Value.Year, dateTimePicker1.Value.Month, dayLastDate);
             //MessageBox.Show($"hello world {dayLast}");
 
-            int i = 1;
-            for (DateTime date = dayFirst; dayLast.CompareTo(date) > 0; date = date.AddDays(1.0))
+            
+            for (DateTime date = dayFirst; dayLast.CompareTo(date) >= 1; date = date.AddDays(1.0))
             {
                 dataGridView1.Rows.Add(date.ToString("dd/MM/yyyy - dddd"));
             }
-            
+            dataGridView1.Rows.Add(dayLast);
+
 
 
             //(dateTimePicker1.Value.Date - StartDate.Date).Days

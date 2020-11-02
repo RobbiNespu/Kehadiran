@@ -148,7 +148,7 @@
             this.Column9});
             this.dataGridView1.Location = new System.Drawing.Point(13, 75);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(945, 150);
+            this.dataGridView1.Size = new System.Drawing.Size(945, 467);
             this.dataGridView1.TabIndex = 4;
             this.dataGridView1.Text = "dataGridView1";
             this.dataGridView1.Visible = false;
