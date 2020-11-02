@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace Kehadiran
@@ -64,7 +63,7 @@ namespace Kehadiran
             //MessageBox.Show($"{dataGridView1.Columns[e.ColumnIndex].Name}  = {e.ColumnIndex} {e.RowIndex}");
             //MessageBox.Show($"You must be logged in as an Administrator in order to change the facility configuration no {e.ColumnIndex}.", "Delete Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             if (dataGridView1.Columns[e.ColumnIndex].Name == "Column2" || dataGridView1.Columns[e.ColumnIndex].Name == "Column3" || dataGridView1.Columns[e.ColumnIndex].Name == "Column5" || dataGridView1.Columns[e.ColumnIndex].Name == "Column6" || dataGridView1.Columns[e.ColumnIndex].Name == "Column8" || dataGridView1.Columns[e.ColumnIndex].Name == "Column9")
-            {   
+            {
                 //MessageBox.Show($"{dataGridView1.Columns[e.ColumnIndex].Name}  = {e.ColumnIndex} {e.RowIndex}");
                 setNewCellDate(e);
             }
@@ -153,13 +152,24 @@ namespace Kehadiran
                         {
                             tw.Write("\t" + dataGridView1.Rows[i].Cells[v].Value.ToString() + "\t" + "|");
                         }
-                        
+
                     }
                     tw.WriteLine("");
                     tw.WriteLine("-----------------------------------------------------");
                 }
                 tw.Close();
                 MessageBox.Show("Data Exported");
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Yes or no", "The Title", 
+                MessageBoxButtons.YesNo, 
+                MessageBoxIcon.Question,
+                MessageBoxDefaultButton.Button1) == System.Windows.Forms.DialogResult.Yes)
+            {
+                MessageBox.Show("RESET!!!!!!!!");
             }
         }
     }
