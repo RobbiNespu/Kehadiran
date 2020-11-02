@@ -18,7 +18,11 @@ namespace Kehadiran
             dateTimePicker1.Format = DateTimePickerFormat.Custom;
             dateTimePicker1.CustomFormat = "dd/MM/yyyy - dddd";
         }
-    }
 
+        private void btnGenerate_Click(object sender, EventArgs e)
+        {
+            dataGridView1.Visible = true;
+        }
+    }
 
 }
