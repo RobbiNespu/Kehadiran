@@ -33,6 +33,9 @@ namespace Kehadiran
             btnGenerate.Enabled = false;
 
             dataGridView1.ColumnHeadersVisible = true;
+
+            dataGridView1.Columns[2].DefaultCellStyle.Format = "hh:mm:ss";
+
             //dataGridView1.DefaultCellStyle.Format = "hh:mm:ss tt";
             //dataGridView1.ColumnHeadersDefaultCellStyle.Format = "hh:mm:ss tt";
 
@@ -113,6 +116,7 @@ namespace Kehadiran
 
         private void button1_Click(object sender, EventArgs e)
         {
+            TimeSpan totalEveryHour = new TimeSpan();
             /*string startTime = "7:00 AM";
             string endTime = "2:00 PM";
 
@@ -128,9 +132,29 @@ namespace Kehadiran
                     var timeIN_beforeLunch = dataGridView1.Rows[i].Cells["Column2"].Value.ToString();
                     var timeOUT_beforeLunch = dataGridView1.Rows[i].Cells["Column3"].Value.ToString();
                     var totalHourBeforeLunch = DateTime.Parse(timeOUT_beforeLunch).Subtract(DateTime.Parse(timeIN_beforeLunch));
-                    dataGridView1.Rows[i].Cells["Column10"].Value = totalHourBeforeLunch;
-                    MessageBox.Show($" work h {totalHourBeforeLunch}");
+                    totalEveryHour = totalHourBeforeLunch;
+                    dataGridView1.Rows[i].Cells["Column10"].Value = totalEveryHour;
+                    //MessageBox.Show($" work h {totalHourBeforeLunch}");
                 }
+
+                if (dataGridView1.Rows[i].Cells["Column5"].Value != null && dataGridView1.Rows[i].Cells["Column6"].Value.ToString() != null)
+                {
+                    var timeIN_afterLunch = dataGridView1.Rows[i].Cells["Column5"].Value.ToString();
+                    var timeOUT_afterLunch = dataGridView1.Rows[i].Cells["Column6"].Value.ToString();
+                    var totalHourAfterLunch = DateTime.Parse(timeOUT_afterLunch).Subtract(DateTime.Parse(timeIN_afterLunch));
+                    totalEveryHour = totalEveryHour + totalHourAfterLunch;
+                    dataGridView1.Rows[i].Cells["Column10"].Value = totalEveryHour;
+                }
+
+                if (dataGridView1.Rows[i].Cells["Column8"].Value != null && dataGridView1.Rows[i].Cells["Column9"].Value.ToString() != null)
+                {
+                    var timeIN_dinner = dataGridView1.Rows[i].Cells["Column8"].Value.ToString();
+                    var timeOUT_dinner = dataGridView1.Rows[i].Cells["Column9"].Value.ToString();
+                    var totalHourDinnner = DateTime.Parse(timeOUT_dinner).Subtract(DateTime.Parse(timeIN_dinner));
+                    totalEveryHour = totalEveryHour + totalHourDinnner;
+                    dataGridView1.Rows[i].Cells["Column10"].Value = totalEveryHour;
+                }
+
             }
         }
 
@@ -141,7 +165,8 @@ namespace Kehadiran
                 band.ReadOnly = true;
             }
 
-            using (System.IO.TextWriter tw = new System.IO.StreamWriter(@"C:\\Users\\Robbi\\Desktop\\sample.txt"))
+            string path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            using (System.IO.TextWriter tw = new System.IO.StreamWriter($"{path}\\sample1.txt"))
             {
                 for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
                 {
@@ -164,8 +189,8 @@ namespace Kehadiran
 
         private void button3_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Yes or no", "The Title", 
-                MessageBoxButtons.YesNo, 
+            if (MessageBox.Show("Yes or no", "The Title",
+                MessageBoxButtons.YesNo,
                 MessageBoxIcon.Question,
                 MessageBoxDefaultButton.Button1) == System.Windows.Forms.DialogResult.Yes)
             {
@@ -173,4 +198,5 @@ namespace Kehadiran
             }
         }
     }
+
 }
