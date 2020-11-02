@@ -1,6 +1,6 @@
-﻿using Microsoft.VisualBasic;
-using System;
+﻿using System;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Kehadiran
@@ -14,7 +14,7 @@ namespace Kehadiran
         {
             InitializeComponent();
             SetMyCustomFormat();
-            
+
         }
 
         private void SetMyCustomFormat()
@@ -63,8 +63,8 @@ namespace Kehadiran
         {
             //MessageBox.Show($"{dataGridView1.Columns[e.ColumnIndex].Name}  = {e.ColumnIndex} {e.RowIndex}");
             //MessageBox.Show($"You must be logged in as an Administrator in order to change the facility configuration no {e.ColumnIndex}.", "Delete Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            if (dataGridView1.Columns[e.ColumnIndex].Name == "Column2" || dataGridView1.Columns[e.ColumnIndex].Name == "Column3" || dataGridView1.Columns[e.ColumnIndex].Name == "Column5" || dataGridView1.Columns[e.ColumnIndex].Name == "Column6"|| dataGridView1.Columns[e.ColumnIndex].Name == "Column8" || dataGridView1.Columns[e.ColumnIndex].Name == "Column9")
-            {
+            if (dataGridView1.Columns[e.ColumnIndex].Name == "Column2" || dataGridView1.Columns[e.ColumnIndex].Name == "Column3" || dataGridView1.Columns[e.ColumnIndex].Name == "Column5" || dataGridView1.Columns[e.ColumnIndex].Name == "Column6" || dataGridView1.Columns[e.ColumnIndex].Name == "Column8" || dataGridView1.Columns[e.ColumnIndex].Name == "Column9")
+            {   
                 //MessageBox.Show($"{dataGridView1.Columns[e.ColumnIndex].Name}  = {e.ColumnIndex} {e.RowIndex}");
                 setNewCellDate(e);
             }
@@ -79,7 +79,7 @@ namespace Kehadiran
             _Rectangle = dataGridView1.GetCellDisplayRectangle(e.ColumnIndex, e.RowIndex, true); //  
             dtPicker.Size = new Size(_Rectangle.Width, _Rectangle.Height); //  
             dtPicker.Location = new Point(_Rectangle.X, _Rectangle.Y); //  
-            
+
             dtPicker.Format = DateTimePickerFormat.Time;
             dtPicker.ShowUpDown = true;
 
@@ -98,6 +98,8 @@ namespace Kehadiran
         private void dtPicker_TextChange(object sender, EventArgs e)
         {
             dataGridView1.CurrentCell.Value = dtPicker.Text.ToString();
+            //MessageBox.Show($" CurrentCell  {dataGridView1.CurrentCell.Value}");
+
         }
 
         private void dataGridView1_Scroll(object sender, ScrollEventArgs e)
@@ -119,33 +121,17 @@ namespace Kehadiran
             MessageBox.Show($"hello world {duration} h");
             */
 
-           
-
             for (int i = 0; i < dataGridView1.RowCount; i++)
             {
-                try
+                if (dataGridView1.Rows[i].Cells["Column2"].Value != null && dataGridView1.Rows[i].Cells["Column3"].Value.ToString() != null)
                 {
-                    if (dataGridView1.Rows[i + 1].Cells["Column2"].Value != null)
-                    {
-                        MessageBox.Show($" ok {dataGridView1.Rows[i + 1].Cells["Column2"].Value.ToString()}");
-                    }
-
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($" nok = {ex.StackTrace}");
-                }
-                
-                
-
-                /*var timeIN_beforeLunch = dataGridView1.Rows[i + 1].Cells["Column2"].Value.ToString();
-                var timeOUT_beforeLunch = dataGridView1.Rows[i + 1].Cells["Column3"].Value.ToString();
-
-                if(timeIN_beforeLunch!=null && timeOUT_beforeLunch != null)
-                {
-                   var totalHourBeforeLunch = DateTime.Parse(timeOUT_beforeLunch).Subtract(DateTime.Parse(timeIN_beforeLunch));
+                    //MessageBox.Show($" ok {dataGridView1.Rows[i].Cells["Column2"].Value.ToString()}");
+                    var timeIN_beforeLunch = dataGridView1.Rows[i].Cells["Column2"].Value.ToString();
+                    var timeOUT_beforeLunch = dataGridView1.Rows[i].Cells["Column3"].Value.ToString();
+                    var totalHourBeforeLunch = DateTime.Parse(timeOUT_beforeLunch).Subtract(DateTime.Parse(timeIN_beforeLunch));
+                    dataGridView1.Rows[i].Cells["Column10"].Value = totalHourBeforeLunch;
                     MessageBox.Show($" work h {totalHourBeforeLunch}");
-                }*/
+                }
             }
         }
 
@@ -154,6 +140,26 @@ namespace Kehadiran
             foreach (DataGridViewBand band in dataGridView1.Columns)
             {
                 band.ReadOnly = true;
+            }
+
+            using (System.IO.TextWriter tw = new System.IO.StreamWriter(@"C:\\Users\\Robbi\\Desktop\\sample.txt"))
+            {
+                for (int i = 0; i < dataGridView1.Rows.Count - 1; i++)
+                {
+                    for (int j = 1; j < dataGridView1.Columns.Count; j++)
+                    {
+                        var v = string.Concat("Column", j);
+                        if (dataGridView1.Rows[i].Cells[v].Value != null)
+                        {
+                            tw.Write("\t" + dataGridView1.Rows[i].Cells[v].Value.ToString() + "\t" + "|");
+                        }
+                        
+                    }
+                    tw.WriteLine("");
+                    tw.WriteLine("-----------------------------------------------------");
+                }
+                tw.Close();
+                MessageBox.Show("Data Exported");
             }
         }
     }
